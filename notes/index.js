@@ -11,9 +11,21 @@ app.use(express.json())
 const port=process.env.PORT || 8010
 
 app.get("/",(req,res)=>{
-    res.send({"msg":"port 8010 running"})
+    res.send({"msg":"home page"})
 })
 app.use("/api/notes",noteRouteHandler)
+
+app.use((req, res) => {
+    res.status(404).json({ "error": "Route is not defined" });
+});
+
+//error handler
+app.use((err, req, res, next) => {
+  res.status(500).json({
+    error: "Internal Server Error",
+    message: err.message || "Something went wrong",
+  });
+});
 app.listen(port,async()=>{
     try {
         await connect
